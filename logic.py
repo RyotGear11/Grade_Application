@@ -37,20 +37,22 @@ class Logic(QMainWindow, Ui_MainWindow):
         """
         try:
             name_input = self.lineEdit_name.text()
-            if not name_input.isalpha():
-                raise ValueError('Use Only Alphabetical Letters.')
             if not name_input:
                 raise ValueError('Box Is Empty.')
+            if not name_input.isalpha():
+                raise ValueError('Use Only Alphabetical Letters.')
+
             return True
 
         except ValueError as e:
             name_error_message = str(e)
-            if 'Use Only' in name_error_message:
-                QMessageBox.critical(self, 'Error', str(e))
-                return False
-            elif 'Box Is' in name_error_message:
+            if 'Box Is' in name_error_message:
                 QMessageBox.warning(self, 'Error', str(e))
                 return False
+            elif 'Use Only' in name_error_message:
+                QMessageBox.critical(self, 'Error', str(e))
+                return False
+
 
     def attempts_info(self) -> bool:
         """
@@ -196,6 +198,7 @@ class Logic(QMainWindow, Ui_MainWindow):
                 self.store_csv(self.check_scores(), avg)
                 student_name = self.lineEdit_name.text()
                 grade = self.calc_grade(avg)
+                self.label_message.setVisible(True)
                 if grade == 'A':
                     self.label_message.setStyleSheet('color: blue')
                     self.label_message.setText(f'{student_name}\'s grade is an A!\nGreat Work!')
@@ -206,11 +209,11 @@ class Logic(QMainWindow, Ui_MainWindow):
                     self.pushButton_new.setVisible(True)
                 elif grade == 'C':
                     self.label_message.setStyleSheet('color: yellow')
-                    self.label_message.setText(f'{student_name}\'s grade is a C!\nNot the best, but not the greatest.')
+                    self.label_message.setText(f'{student_name}\'s grade is a C!\nYou did okay.')
                     self.pushButton_new.setVisible(True)
                 elif grade == 'D':
                     self.label_message.setStyleSheet('color: orange')
-                    self.label_message.setText(f'{student_name}\'s grade is a D!\nNot exactly what you want to see.')
+                    self.label_message.setText(f'{student_name}\'s grade is a D!\nNot great!')
                     self.pushButton_new.setVisible(True)
                 elif grade == 'F':
                     self.label_message.setStyleSheet('color: red')
